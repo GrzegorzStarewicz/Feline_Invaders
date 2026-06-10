@@ -65,8 +65,9 @@ uint8_t cykl = 0;
 
 //   BALANS GRY
 //czestosc wrogow x / 255
-uint8_t trudnosc = 255 / 4; // czyli 1/4 jako poczatkowa
-//szybkosc timera 1 gry 10500 - szybkie, 5000 - bardzo szybkie, 20000 - wolne
+uint8_t trudnosc = 255 / 4; // czyli 1/4
+uint8_t trudnosc_mega = 255 / 16; // czestosc mocnych wrogow, czyli 1 / 16
+//poczatkowa szybkosc timera 1 gry 10500 - szybkie, 5000 - bardzo szybkie, 20000 - wolne
 uint16_t szybkosc_gry = 14500;
 #define przyspieszanie 64
 
@@ -398,7 +399,7 @@ void ruch()
 		
 		// spawnowanie wrogow A
 		if(megaliczA == 0){
-			if(fast_rand() < trudnosc / 4)
+			if(fast_rand() < trudnosc_mega)
 			{
 				// spawn pierwszy mocny
 				megaliczA = 1;
@@ -417,7 +418,7 @@ void ruch()
 		
 		// spawnowanie wrogow B
 		if(megaliczB == 0){
-			if(fast_rand() < trudnosc / 4)
+			if(fast_rand() < trudnosc_mega)
 			{
 				// spawn pierwszy mocny
 				megaliczB = 1;
