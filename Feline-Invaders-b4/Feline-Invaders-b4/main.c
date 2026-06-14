@@ -586,6 +586,7 @@ void seg7_init()
 }
 
 void ustawienie_poczatkowe(){
+	szybkosc_gry = 6000;
 	OCR1A = szybkosc_gry;
 	
 	wrogowieA = 0;
