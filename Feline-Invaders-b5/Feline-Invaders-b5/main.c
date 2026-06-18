@@ -71,7 +71,7 @@ uint8_t trudnosc_mega = 255 / 24; // czestosc mocnych wrogow, czyli 1 / 16
 uint16_t szybkosc_gry = 6000;
 #define przyspieszanie 32
 
-#define szybkosc_animacji 10250000
+#define szybkosc_animacji 30250
 
 //dane gry
 uint8_t zycie = 9;
@@ -161,7 +161,7 @@ ISR(TIMER2_COMP_vect) {
 	if(!sfx_length--) buzzer_off();
 }
 
-void play_sfx(uint8_t length, uint16_t frequency, int8_t change)
+void play_sfx(uint16_t length, uint16_t frequency, int8_t change)
 {
 	OCR2 = 11059200 / (64 * frequency * 2);
 	sfx_change = change;
@@ -753,7 +753,7 @@ int main(void)
 	
 	seg7_init();
 	
-	
+	//faza = 2;
 	
 	OCR1A = szybkosc_animacji;
 	
@@ -784,6 +784,35 @@ int main(void)
 						NapisB(" ^o o^ to start");
 						break;
 					
+				}
+				cykl_255++;
+				switch(cykl_255%8)
+				{
+					case 0:
+					play_sfx(90,440,-2);
+					break;
+					case 1:
+					play_sfx(2,500,0); //hh
+					break;
+					case 2:
+					play_sfx(450,440,0);
+					break;
+					case 3:
+					play_sfx(350,659,1);
+					break;
+					case 4:
+					play_sfx(20,554,0); //hh?
+					break;
+					
+					case 5:
+					play_sfx(2,500,0); //hh
+					break;
+					case 6:
+					play_sfx(60,400,3); //hh
+					break;
+					case 7:
+					play_sfx(2,500,0); //hh
+					break;
 				}
 				cykl = 0;
 			}
@@ -884,6 +913,7 @@ int main(void)
 		case 2: // GAME OVER
 			if (cykl == 1)
 			{
+				cykl_255++;
 				if(klatka++==3)klatka = 0;
 				switch(klatka)
 				{
@@ -902,6 +932,34 @@ int main(void)
 					NapisB(" ^o o^ to start");
 					break;
 					
+				}
+				switch(cykl_255%8)
+				{
+					case 0:
+					play_sfx(90,440,2);
+					break;
+					case 1:
+					play_sfx(2,500,0); //hh
+					break;
+					case 2:
+					play_sfx(850,392,0);
+					break;
+					case 3:
+					play_sfx(850,587,0);
+					break;
+					case 4:
+					play_sfx(20,523,0);
+					break;
+					
+					case 5:
+					play_sfx(2,500,0); //hh
+					break;
+					case 6:
+					play_sfx(2,500,0); //hh
+					break;
+					case 7:
+					play_sfx(2,500,0); //hh
+					break;
 				}
 				cykl = 0;
 			}
