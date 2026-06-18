@@ -1,0 +1,347 @@
+
+buzzer-na-t0.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000208  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000027c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000003  00800060  00800060  0000027c  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000027c  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002ac  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000048  00000000  00000000  000002e8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000699  00000000  00000000  00000330  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000576  00000000  00000000  000009c9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   0000028b  00000000  00000000  00000f3f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000000c8  00000000  00000000  000011cc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000035e  00000000  00000000  00001294  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000178  00000000  00000000  000015f2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000038  00000000  00000000  0000176a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 52 00 	jmp	0xa4	; 0xa4 <__vector_4>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a3 36       	cpi	r26, 0x63	; 99
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 b8 00 	call	0x170	; 0x170 <main>
+  74:	0c 94 02 01 	jmp	0x204	; 0x204 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <buzzer_init_software>:
+volatile uint16_t sfx_length = 0;
+volatile int8_t sfx_change = 0;
+
+void buzzer_init_software(void) {
+	// DDR out
+	BUZZER_DIR |= (1 << BUZZER_PIN);
+  7c:	81 b3       	in	r24, 0x11	; 17
+  7e:	80 61       	ori	r24, 0x10	; 16
+  80:	81 bb       	out	0x11, r24	; 17
+
+	// WGM12 = 1 (CTC Mode)
+	// CS11 = 1 (Prescaler 64)
+	TCCR2 = (1 << WGM21) | (1 << CS22);//|(1 << CS21);
+  82:	8c e0       	ldi	r24, 0x0C	; 12
+  84:	85 bd       	out	0x25, r24	; 37
+
+	// Pitch
+	// 11059200 / (64 * frequency * 2)
+	OCR2 = 43;
+  86:	8b e2       	ldi	r24, 0x2B	; 43
+  88:	83 bd       	out	0x23, r24	; 35
+
+	sei();
+  8a:	78 94       	sei
+  8c:	08 95       	ret
+
+0000008e <buzzer_on>:
+}
+
+void buzzer_on(void) {
+	// Enable the Timer 1 Compare A Interrupt
+	TIMSK |= (1 << OCIE2);
+  8e:	89 b7       	in	r24, 0x39	; 57
+  90:	80 68       	ori	r24, 0x80	; 128
+  92:	89 bf       	out	0x39, r24	; 57
+  94:	08 95       	ret
+
+00000096 <buzzer_off>:
+}
+
+void buzzer_off(void) {
+	// Disable the Interrupt and ensure the pin is low
+	TIMSK &= ~(1 << OCIE2);
+  96:	89 b7       	in	r24, 0x39	; 57
+  98:	8f 77       	andi	r24, 0x7F	; 127
+  9a:	89 bf       	out	0x39, r24	; 57
+	BUZZER_PORT &= ~(1 << BUZZER_PIN);
+  9c:	82 b3       	in	r24, 0x12	; 18
+  9e:	8f 7e       	andi	r24, 0xEF	; 239
+  a0:	82 bb       	out	0x12, r24	; 18
+  a2:	08 95       	ret
+
+000000a4 <__vector_4>:
+}
+
+
+ISR(TIMER2_COMP_vect) {
+  a4:	1f 92       	push	r1
+  a6:	0f 92       	push	r0
+  a8:	0f b6       	in	r0, 0x3f	; 63
+  aa:	0f 92       	push	r0
+  ac:	11 24       	eor	r1, r1
+  ae:	2f 93       	push	r18
+  b0:	3f 93       	push	r19
+  b2:	4f 93       	push	r20
+  b4:	5f 93       	push	r21
+  b6:	6f 93       	push	r22
+  b8:	7f 93       	push	r23
+  ba:	8f 93       	push	r24
+  bc:	9f 93       	push	r25
+  be:	af 93       	push	r26
+  c0:	bf 93       	push	r27
+  c2:	ef 93       	push	r30
+  c4:	ff 93       	push	r31
+	// Toggle the buzzer pin (Flips 0 to 1, or 1 to 0)
+	BUZZER_PORT ^= (1 << BUZZER_PIN);
+  c6:	92 b3       	in	r25, 0x12	; 18
+  c8:	80 e1       	ldi	r24, 0x10	; 16
+  ca:	89 27       	eor	r24, r25
+  cc:	82 bb       	out	0x12, r24	; 18
+	
+	if((sfx_length & 1) && (sfx_length & 2))
+  ce:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <sfx_length>
+  d2:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <sfx_length+0x1>
+  d6:	80 ff       	sbrs	r24, 0
+  d8:	0b c0       	rjmp	.+22     	; 0xf0 <__vector_4+0x4c>
+  da:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <sfx_length>
+  de:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <sfx_length+0x1>
+  e2:	81 ff       	sbrs	r24, 1
+  e4:	05 c0       	rjmp	.+10     	; 0xf0 <__vector_4+0x4c>
+	OCR2 -= sfx_change;
+  e6:	90 91 60 00 	lds	r25, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  ea:	83 b5       	in	r24, 0x23	; 35
+  ec:	89 1b       	sub	r24, r25
+  ee:	83 bd       	out	0x23, r24	; 35
+	
+	if(!sfx_length--) buzzer_off();
+  f0:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <sfx_length>
+  f4:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <sfx_length+0x1>
+  f8:	9c 01       	movw	r18, r24
+  fa:	21 50       	subi	r18, 0x01	; 1
+  fc:	31 09       	sbc	r19, r1
+  fe:	30 93 62 00 	sts	0x0062, r19	; 0x800062 <sfx_length+0x1>
+ 102:	20 93 61 00 	sts	0x0061, r18	; 0x800061 <sfx_length>
+ 106:	89 2b       	or	r24, r25
+ 108:	11 f4       	brne	.+4      	; 0x10e <__vector_4+0x6a>
+ 10a:	0e 94 4b 00 	call	0x96	; 0x96 <buzzer_off>
+}
+ 10e:	ff 91       	pop	r31
+ 110:	ef 91       	pop	r30
+ 112:	bf 91       	pop	r27
+ 114:	af 91       	pop	r26
+ 116:	9f 91       	pop	r25
+ 118:	8f 91       	pop	r24
+ 11a:	7f 91       	pop	r23
+ 11c:	6f 91       	pop	r22
+ 11e:	5f 91       	pop	r21
+ 120:	4f 91       	pop	r20
+ 122:	3f 91       	pop	r19
+ 124:	2f 91       	pop	r18
+ 126:	0f 90       	pop	r0
+ 128:	0f be       	out	0x3f, r0	; 63
+ 12a:	0f 90       	pop	r0
+ 12c:	1f 90       	pop	r1
+ 12e:	18 95       	reti
+
+00000130 <play_sfx>:
+
+void play_sfx(uint8_t length, uint16_t frequency, int8_t change)
+{
+ 130:	cf 93       	push	r28
+ 132:	df 93       	push	r29
+ 134:	c8 2f       	mov	r28, r24
+ 136:	d4 2f       	mov	r29, r20
+	OCR2 = 11059200 / (64 * frequency * 2);
+ 138:	9b 01       	movw	r18, r22
+ 13a:	36 95       	lsr	r19
+ 13c:	32 2f       	mov	r19, r18
+ 13e:	22 27       	eor	r18, r18
+ 140:	37 95       	ror	r19
+ 142:	27 95       	ror	r18
+ 144:	40 e0       	ldi	r20, 0x00	; 0
+ 146:	50 e0       	ldi	r21, 0x00	; 0
+ 148:	60 e0       	ldi	r22, 0x00	; 0
+ 14a:	70 ec       	ldi	r23, 0xC0	; 192
+ 14c:	88 ea       	ldi	r24, 0xA8	; 168
+ 14e:	90 e0       	ldi	r25, 0x00	; 0
+ 150:	0e 94 c1 00 	call	0x182	; 0x182 <__divmodsi4>
+ 154:	23 bd       	out	0x23, r18	; 35
+	sfx_change = change;
+ 156:	d0 93 60 00 	sts	0x0060, r29	; 0x800060 <__DATA_REGION_ORIGIN__>
+	sfx_length = length;//*frequency/80;
+ 15a:	8c 2f       	mov	r24, r28
+ 15c:	90 e0       	ldi	r25, 0x00	; 0
+ 15e:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <sfx_length+0x1>
+ 162:	80 93 61 00 	sts	0x0061, r24	; 0x800061 <sfx_length>
+	buzzer_on();
+ 166:	0e 94 47 00 	call	0x8e	; 0x8e <buzzer_on>
+}
+ 16a:	df 91       	pop	r29
+ 16c:	cf 91       	pop	r28
+ 16e:	08 95       	ret
+
+00000170 <main>:
+
+int main(void)
+{
+    buzzer_init_software();
+ 170:	0e 94 3e 00 	call	0x7c	; 0x7c <buzzer_init_software>
+	
+	
+	// strzal
+	//play_sfx(40, 8000, -64);
+	play_sfx(100, 8000, -8);
+ 174:	48 ef       	ldi	r20, 0xF8	; 248
+ 176:	60 e4       	ldi	r22, 0x40	; 64
+ 178:	7f e1       	ldi	r23, 0x1F	; 31
+ 17a:	84 e6       	ldi	r24, 0x64	; 100
+ 17c:	0e 94 98 00 	call	0x130	; 0x130 <play_sfx>
+ 180:	ff cf       	rjmp	.-2      	; 0x180 <main+0x10>
+
+00000182 <__divmodsi4>:
+ 182:	05 2e       	mov	r0, r21
+ 184:	97 fb       	bst	r25, 7
+ 186:	1e f4       	brtc	.+6      	; 0x18e <__divmodsi4+0xc>
+ 188:	00 94       	com	r0
+ 18a:	0e 94 d8 00 	call	0x1b0	; 0x1b0 <__negsi2>
+ 18e:	57 fd       	sbrc	r21, 7
+ 190:	07 d0       	rcall	.+14     	; 0x1a0 <__divmodsi4_neg2>
+ 192:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <__udivmodsi4>
+ 196:	07 fc       	sbrc	r0, 7
+ 198:	03 d0       	rcall	.+6      	; 0x1a0 <__divmodsi4_neg2>
+ 19a:	4e f4       	brtc	.+18     	; 0x1ae <__divmodsi4_exit>
+ 19c:	0c 94 d8 00 	jmp	0x1b0	; 0x1b0 <__negsi2>
+
+000001a0 <__divmodsi4_neg2>:
+ 1a0:	50 95       	com	r21
+ 1a2:	40 95       	com	r20
+ 1a4:	30 95       	com	r19
+ 1a6:	21 95       	neg	r18
+ 1a8:	3f 4f       	sbci	r19, 0xFF	; 255
+ 1aa:	4f 4f       	sbci	r20, 0xFF	; 255
+ 1ac:	5f 4f       	sbci	r21, 0xFF	; 255
+
+000001ae <__divmodsi4_exit>:
+ 1ae:	08 95       	ret
+
+000001b0 <__negsi2>:
+ 1b0:	90 95       	com	r25
+ 1b2:	80 95       	com	r24
+ 1b4:	70 95       	com	r23
+ 1b6:	61 95       	neg	r22
+ 1b8:	7f 4f       	sbci	r23, 0xFF	; 255
+ 1ba:	8f 4f       	sbci	r24, 0xFF	; 255
+ 1bc:	9f 4f       	sbci	r25, 0xFF	; 255
+ 1be:	08 95       	ret
+
+000001c0 <__udivmodsi4>:
+ 1c0:	a1 e2       	ldi	r26, 0x21	; 33
+ 1c2:	1a 2e       	mov	r1, r26
+ 1c4:	aa 1b       	sub	r26, r26
+ 1c6:	bb 1b       	sub	r27, r27
+ 1c8:	fd 01       	movw	r30, r26
+ 1ca:	0d c0       	rjmp	.+26     	; 0x1e6 <__udivmodsi4_ep>
+
+000001cc <__udivmodsi4_loop>:
+ 1cc:	aa 1f       	adc	r26, r26
+ 1ce:	bb 1f       	adc	r27, r27
+ 1d0:	ee 1f       	adc	r30, r30
+ 1d2:	ff 1f       	adc	r31, r31
+ 1d4:	a2 17       	cp	r26, r18
+ 1d6:	b3 07       	cpc	r27, r19
+ 1d8:	e4 07       	cpc	r30, r20
+ 1da:	f5 07       	cpc	r31, r21
+ 1dc:	20 f0       	brcs	.+8      	; 0x1e6 <__udivmodsi4_ep>
+ 1de:	a2 1b       	sub	r26, r18
+ 1e0:	b3 0b       	sbc	r27, r19
+ 1e2:	e4 0b       	sbc	r30, r20
+ 1e4:	f5 0b       	sbc	r31, r21
+
+000001e6 <__udivmodsi4_ep>:
+ 1e6:	66 1f       	adc	r22, r22
+ 1e8:	77 1f       	adc	r23, r23
+ 1ea:	88 1f       	adc	r24, r24
+ 1ec:	99 1f       	adc	r25, r25
+ 1ee:	1a 94       	dec	r1
+ 1f0:	69 f7       	brne	.-38     	; 0x1cc <__udivmodsi4_loop>
+ 1f2:	60 95       	com	r22
+ 1f4:	70 95       	com	r23
+ 1f6:	80 95       	com	r24
+ 1f8:	90 95       	com	r25
+ 1fa:	9b 01       	movw	r18, r22
+ 1fc:	ac 01       	movw	r20, r24
+ 1fe:	bd 01       	movw	r22, r26
+ 200:	cf 01       	movw	r24, r30
+ 202:	08 95       	ret
+
+00000204 <_exit>:
+ 204:	f8 94       	cli
+
+00000206 <__stop_program>:
+ 206:	ff cf       	rjmp	.-2      	; 0x206 <__stop_program>
